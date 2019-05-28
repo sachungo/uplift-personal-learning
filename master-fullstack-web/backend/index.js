@@ -1,4 +1,13 @@
-const Dragon = require('./dragon');
+const Generation = require('./generation');
 
-const dr = new Dragon();
-console.log(dr);
+const generation = new Generation();
+
+console.log('Generation: ', generation);
+
+const gooby = generation.createDragon();
+console.log('Gooby dragon: ', gooby);
+
+setTimeout(() => {
+  const mimar = generation.createDragon();
+  console.log('mimar dragon: ', mimar);
+}, 15000);
