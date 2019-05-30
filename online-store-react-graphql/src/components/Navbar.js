@@ -19,14 +19,14 @@ const Navbar = () => (
     justifyContent="around"
   >
     {/* Sign In link */}
-    <NavLink to="/signin">
+    <NavLink activeClassName="active" to="/signin">
       <Text size='xl' color="white">
         Sign In
       </Text>
     </NavLink>
 
     {/* Title and Logo */}
-    <NavLink to="/">
+    <NavLink activeClassName="active" to="/" exact>
       <Box display="flex" alignItems="center">
         <Box height={50} width={50} margin={2}>
           <Image
@@ -43,7 +43,7 @@ const Navbar = () => (
     </NavLink>
 
     {/* Sign Up link */}
-    <NavLink to="/signup">
+    <NavLink activeClassName="active" to="/signup">
       <Text size='xl' color="white">
         Sign Up
       </Text>
