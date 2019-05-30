@@ -6,7 +6,8 @@ import {
   Route
  } from 'react-router-dom';
 
-import "./index.css";
+import 'gestalt/dist/gestalt.css';
+
 import App from "./components/App";
 import Signin from "./components/Signin";
 import Signup from "./components/Signup";
