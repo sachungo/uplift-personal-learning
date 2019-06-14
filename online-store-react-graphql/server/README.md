@@ -8,6 +8,12 @@ To start the server, run the command:
 strapi develop
 ```
 
+Create an admin user for the web GUI in order to access the dashboard
+
+Install graphQL from the web GUI's **marketplace** or install it using the CLI as explained in the [GraphQL guide](https://strapi.io/documentation/3.0.0-beta.x/guides/graphql.html#configurations)
+
+You can then access graphQL playground by visiting http://localhost:1337/graphql
+
 
 ### Notes on gettings started with strapi
 After installing strapi, create a backend directory using `strapi new <server-name>` and choose either the custom or normal installation process in the interactive session.
