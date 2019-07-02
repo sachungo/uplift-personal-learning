@@ -7,7 +7,8 @@ import {
   Image,
   Card,
   Button,
-  Mask
+  Mask,
+  IconButton
  } from "gestalt";
  import { Link } from 'react-router-dom';
 
@@ -51,6 +52,33 @@ export default class Brews extends React.Component {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  addToCart = brew => {
+    const { cartItems } = this.state;
+    const alreadyInCart = cartItems.findIndex(
+      item => item._id === brew._id
+    );
+
+    if (alreadyInCart === -1) { // if not in cart, add it together with quantity key
+      const updatedItems = cartItems.concat({...brew, quantity: 1});
+      this.setState({
+        cartItems: updatedItems
+      })
+    } else { // if in cart increase quantity by one
+      const updatedItems = [...cartItems];
+      updatedItems[alreadyInCart].quantity +=1;
+      this.setState({
+        cartItems: updatedItems
+      });
+    }
+  }
+
+  deleteItemFromCart = (id) => {
+    const filteredItems = this.state.cartItems
+      .filter(item => item._id !== id);
+
+    this.setState({ cartItems: filteredItems });
   }
 
   render() {
@@ -123,7 +151,11 @@ export default class Brews extends React.Component {
 
                     <Box marginTop={2}>
                       <Text bold size="xl">
-                        <Button color="blue" text="Add to cart" />
+                        <Button
+                          color="blue"
+                          text="Add to cart"
+                          onClick={() => this.addToCart(brew)}
+                        />
                       </Text>
                     </Box>
                   </Box>
@@ -148,6 +180,24 @@ export default class Brews extends React.Component {
               </Text>
               {/* Cart items */}
 
+               {cartItems.map(item => (
+                  <Box
+                    key={item._id}
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <Text>
+                      {item.name} X {item.quantity} - ${(item.quantity * item.price).toFixed(2)}
+                    </Text>
+                    <IconButton
+                      accessibilityLabel="Delete Item"
+                      icon="cancel"
+                      size="sm"
+                      iconColor="red"
+                      onClick={() => this.deleteItemFromCart(item._id)}
+                    />
+                  </Box>
+               ))}
               <Box
                 display="flex"
                 alignItems="center"
