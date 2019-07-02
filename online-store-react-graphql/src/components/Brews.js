@@ -12,7 +12,7 @@ import {
  } from "gestalt";
  import { Link } from 'react-router-dom';
 
- import { calculatePrice } from "../utils";
+ import { calculatePrice, setCart, getCart } from "../utils";
 
 const apiUrl = process.env.API_URL || 'http://localhost:1337/';
 const strapi = new Strapi(apiUrl);
@@ -49,7 +49,8 @@ export default class Brews extends React.Component {
 
       this.setState({
         brews: data.brand.brews,
-        brand: data.brand.name
+        brand: data.brand.name,
+        cartItems: getCart()
       })
     } catch (error) {
       console.error(error);
@@ -64,15 +65,17 @@ export default class Brews extends React.Component {
 
     if (alreadyInCart === -1) { // if not in cart, add it together with quantity key
       const updatedItems = cartItems.concat({...brew, quantity: 1});
-      this.setState({
-        cartItems: updatedItems
-      })
+      this.setState(
+        { cartItems: updatedItems },
+        () => setCart(updatedItems)
+      )
     } else { // if in cart increase quantity by one
       const updatedItems = [...cartItems];
       updatedItems[alreadyInCart].quantity +=1;
-      this.setState({
-        cartItems: updatedItems
-      });
+      this.setState(
+        { cartItems: updatedItems },
+        () => setCart(updatedItems)
+      );
     }
   }
 
@@ -80,7 +83,10 @@ export default class Brews extends React.Component {
     const filteredItems = this.state.cartItems
       .filter(item => item._id !== id);
 
-    this.setState({ cartItems: filteredItems });
+    this.setState(
+      { cartItems: filteredItems },
+      () => setCart(filteredItems)
+    );
   }
 
   render() {
