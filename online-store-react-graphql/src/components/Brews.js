@@ -6,7 +6,8 @@ import {
   Text,
   Image,
   Card,
-  Button
+  Button,
+  Mask
  } from "gestalt";
  import { Link } from 'react-router-dom';
 
@@ -16,7 +17,8 @@ const strapi = new Strapi(apiUrl);
 export default class Brews extends React.Component {
   state = {
     brews: [],
-    brand: ''
+    brand: '',
+    cartItems: []
   };
 
   async componentDidMount() {
@@ -52,13 +54,18 @@ export default class Brews extends React.Component {
   }
 
   render() {
-    const { brand, brews } = this.state;
+    const { brand, brews, cartItems } = this.state;
     return (
       <Box
         marginTop={4}
         display="flex"
         justifyContent="center"
         alignItems="start"
+        dangerouslySetInlineStyle={{
+          __style: {
+            flexWrap: 'wrap-reverse'
+          }
+        }}
       >
         {/* brews section */}
         <Box
@@ -124,6 +131,43 @@ export default class Brews extends React.Component {
               </Box>
             )}
           </Box>
+        </Box>
+
+        {/* User cart */}
+        <Box marginTop={2} marginLeft={8} alignSelf="end">
+          <Mask shape="rounded" wash>
+            <Box
+              display="flex"
+              direction="column"
+              alignItems="center"
+              padding={2}
+            >
+              <Heading align="center" size="md">Your Cart</Heading>
+              <Text color='gray' italic>
+                {cartItems.length} items selected
+              </Text>
+              {/* Cart items */}
+
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                direction="column"
+              >
+                <Box margin={2}>
+                  {cartItems.length === 0 && (
+                    <Text color="red">
+                      Pleae select some items
+                    </Text>
+                  )}
+                </Box>
+                <Text size="lg">Total: $3.99</Text>
+                <Text>
+                  <Link to="/checkout">Checkout</Link>
+                </Text>
+              </Box>
+            </Box>
+          </Mask>
         </Box>
       </Box>
     )
