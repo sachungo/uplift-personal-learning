@@ -9,7 +9,13 @@ import {
   TextField
 } from "gestalt";
 
+import Strapi from 'strapi-sdk-javascript/build/main';
+
 import ToastMessage from './ToastMessage';
+import { setToken } from '../utils';
+
+const apiUrl = process.env.API_URL || 'http://localhost:1337/';
+const strapi = new Strapi(apiUrl);
 
 export default class Signup extends React.Component {
   state = {
@@ -17,7 +23,8 @@ export default class Signup extends React.Component {
     email: '',
     password: '',
     toast: false,
-    toastMessage: ''
+    toastMessage: '',
+    loading: false
   };
 
   handleChange = ({ event, value }) => {
@@ -25,14 +32,28 @@ export default class Signup extends React.Component {
     this.setState({ [event.target.name]: value });
   };
 
-  handleSubmit = event => {
+  handleSubmit = async (event) => {
     event.preventDefault();
+    const { email, username, password } = this.state;
 
     if (this.isFormEmpty(this.state)) {
       this.showToast('Fill in all text fields');
       return;
     };
+
+    try {
+      this.setState({ loading: true });
+      const response = await strapi.register(email, username, password);
+      this.setState({ loading: false });
+      setToken(response.jwt);
+      this.redirectUser('/');
+    } catch (error) {
+      this.setState({ loading: false });
+      this.showToast(error.message);
+    }
   };
+
+  redirectUser = path => this.props.history.push(path);
 
   isFormEmpty = ({ username, email, password }) => {
     return !username || !email || !password;
@@ -53,7 +74,7 @@ export default class Signup extends React.Component {
   };
 
   render() {
-    const { toastMessage, toast } = this.state;
+    const { toastMessage, toast, loading } = this.state;
     return (
       <Container>
         <Box
@@ -106,7 +127,13 @@ export default class Signup extends React.Component {
               placeholder="Password"
               onChange={this.handleChange}
             />
-            <Button color="blue" text="Submit" type="submit" inline />
+            <Button
+              color="blue"
+              text="Submit"
+              type="submit"
+              disabled={loading}
+              inline
+            />
           </form>
         </Box>
         <ToastMessage message={toastMessage} show={toast} />

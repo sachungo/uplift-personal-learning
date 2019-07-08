@@ -16,3 +16,10 @@ export const getCart = (cartKey = CART_KEY) => {
 
   return JSON.parse(localStorage.getItem(cartKey)) || [];
 }
+
+const TOKEN_KEY = 'jwt';
+export const setToken = (value, tokenKey = TOKEN_KEY) => {
+  if (localStorage) {
+    localStorage.setItem(tokenKey, JSON.stringify(value));
+  }
+};
