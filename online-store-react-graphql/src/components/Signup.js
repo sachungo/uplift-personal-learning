@@ -43,7 +43,7 @@ export default class Signup extends React.Component {
 
     try {
       this.setState({ loading: true });
-      const response = await strapi.register(email, username, password);
+      const response = await strapi.register(username, email, password);
       this.setState({ loading: false });
       setToken(response.jwt);
       this.redirectUser('/');
