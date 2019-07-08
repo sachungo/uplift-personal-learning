@@ -1,3 +1,6 @@
+/**
+ * Chevkout Utils
+ */
 export const calculatePrice = items => {
   return items
     .reduce((total, item) => total += (item.quantity * item.price), 0)
@@ -17,6 +20,15 @@ export const getCart = (cartKey = CART_KEY) => {
   return JSON.parse(localStorage.getItem(cartKey)) || [];
 }
 
+export const clearCart = (cartKey = CART_KEY) => {
+  if (localStorage) {
+    localStorage.removeItem(cartKey);
+  }
+}
+
+/**
+ * Auth Utils
+ */
 const TOKEN_KEY = 'jwt';
 export const setToken = (value, tokenKey = TOKEN_KEY) => {
   if (localStorage) {
@@ -28,4 +40,10 @@ export const getToken = (tokenKey = TOKEN_KEY) => {
   if (!localStorage) return null;
 
   return JSON.parse(localStorage.getItem(tokenKey)) || null;
+}
+
+export const clearToken = (tokenKey = TOKEN_KEY) => {
+  if (localStorage) {
+    localStorage.removeItem(tokenKey);
+  }
 }

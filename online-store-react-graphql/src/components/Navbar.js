@@ -7,17 +7,25 @@ import {
   Button
 } from "gestalt";
 
-import { NavLink } from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
 
-import { getToken } from "../utils";
+import { getToken, clearCart, clearToken } from "../utils";
 
-const Navbar = () => (
-  !getToken()
-    ? <UnAuthNav />
-    : <AuthNav />
-);
+class Navbar extends React.Component {
+  handleSignout = () => {
+    clearToken();
+    clearCart();
+    this.props.history.push('/');
+  }
 
-const AuthNav = () => (
+  render() {
+    return !getToken()
+      ? <UnAuthNav />
+      : <AuthNav onSignout={this.handleSignout} />
+  }
+}
+
+const AuthNav = ({ onSignout }) => (
   <Box
     height={70}
     color="midnight"
@@ -57,6 +65,7 @@ const AuthNav = () => (
       color="transparent"
       text="Sign Out"
       size="md"
+      onClick={onSignout}
     />
   </Box>
 )
@@ -104,4 +113,4 @@ const UnAuthNav = () => (
   </Box>
 )
 
-export default Navbar;
+export default withRouter(Navbar);
